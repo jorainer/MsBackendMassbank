@@ -51,7 +51,11 @@ main MassBank instance.
 Also, some of the fields in the MassBank database are not directly compatible
 with Spectra, such as the collision energy which is not available as a
 numeric value. The collision energy as available in MassBank is reported as
-spectra variable &quot;collisionEnergyText&quot;." />
+spectra variable &quot;collision_energy_text&quot;. Also, precursor m/z values
+reported for some spectra can not be converted to a numeric and hence NA
+is reported with the spectra variable precursorMz for these spectra. The
+variable &quot;precursor_mz_text&quot; can be used to get the original precursor
+m/z reported in MassBank." />
 
 
 
@@ -83,7 +87,7 @@ spectra variable &quot;collisionEnergyText&quot;." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MsBackendMassbank</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -133,7 +137,11 @@ MassBank database since direct database access is not supported for the
 <p>Also, some of the fields in the MassBank database are not directly compatible
 with <code>Spectra</code>, such as the <em>collision energy</em> which is not available as a
 numeric value. The collision energy as available in MassBank is reported as
-spectra variable <code>"collisionEnergyText"</code>.</p>
+spectra variable <code>"collision_energy_text"</code>. Also, precursor m/z values
+reported for some spectra can not be converted to a <code>numeric</code> and hence <code>NA</code>
+is reported with the spectra variable <code>precursorMz</code> for these spectra. The
+variable <code>"precursor_mz_text"</code> can be used to get the <em>original</em> precursor
+m/z reported in MassBank.</p>
     </div>
 
     <pre class="usage">MsBackendMassbankSql()
@@ -277,7 +285,13 @@ tic(object, initial = TRUE)
 $(x, name)
 
 # S4 method for MsBackendMassbankSql
-$(x, name) &lt;- value</pre>
+$(x, name) &lt;- value
+
+# S4 method for Spectra
+compounds(object, ...)
+
+# S4 method for MsBackendMassbankSql
+compounds(object, ...)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -498,82 +512,201 @@ the original data can not be changed.</p>
 <span class='co'>## initialize the backend:</span>
 <span class='va'>be</span> <span class='op'>&lt;-</span> <span class='fu'>backendInitialize</span><span class='op'>(</span><span class='fu'>MsBackendMassbankSql</span><span class='op'>(</span><span class='op'>)</span>, dbcon <span class='op'>=</span> <span class='va'>con</span><span class='op'>)</span>
 <span class='va'>be</span>
-</div><div class='output co'>#&gt; MsBackendMassbankSql with 3 spectra
-#&gt;     msLevel precursorMz  polarity
-#&gt;   &lt;integer&gt;   &lt;numeric&gt; &lt;integer&gt;
-#&gt; 1         2      179.07         1
-#&gt; 2         2      179.07         1
-#&gt; 3         2      179.07         1
-#&gt;  ... 30 more variables/columns.
+</div><div class='output co'>#&gt; MsBackendMassbankSql with 70 spectra
+#&gt;      msLevel precursorMz  polarity
+#&gt;    &lt;integer&gt;   &lt;numeric&gt; &lt;integer&gt;
+#&gt; 1          2     506.000         0
+#&gt; 2         NA          NA         1
+#&gt; 3         NA          NA         0
+#&gt; 4         NA          NA         1
+#&gt; 5         NA          NA         0
+#&gt; 6          2     185.028         0
+#&gt; 7          2     455.290         1
+#&gt; 8          2     253.051         0
+#&gt; 9          2     358.238         1
+#&gt; 10         2     256.170         1
+#&gt;  ... 33 more variables/columns.
 #&gt;  Use  'spectraVariables' to list all of them.</div><div class='input'>
 <span class='co'>## Access MS level</span>
 <span class='fu'>msLevel</span><span class='op'>(</span><span class='va'>be</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 2 2 2</div><div class='input'><span class='va'>be</span><span class='op'>$</span><span class='va'>msLevel</span>
-</div><div class='output co'>#&gt; [1] 2 2 2</div><div class='input'>
+</div><div class='output co'>#&gt;  [1]  2 NA NA NA NA  2 NA NA NA NA NA NA NA NA NA NA NA NA NA NA  2  2  2  2  2
+#&gt; [26]  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2
+#&gt; [51]  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2</div><div class='input'><span class='va'>be</span><span class='op'>$</span><span class='va'>msLevel</span>
+</div><div class='output co'>#&gt;  [1]  2 NA NA NA NA  2 NA NA NA NA NA NA NA NA NA NA NA NA NA NA  2  2  2  2  2
+#&gt; [26]  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2
+#&gt; [51]  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2  2</div><div class='input'>
 <span class='co'>## Access m/z values</span>
 <span class='va'>be</span><span class='op'>$</span><span class='va'>mz</span>
-</div><div class='output co'>#&gt; NumericList of length 3
-#&gt; [["AC000001"]] 133.0648 151.0754 155.9743 161.0597 179.0703
-#&gt; [["AC000002"]] 133.0648 151.0754 155.9745 161.0597 179.0703
-#&gt; [["AC000003"]] 105.0699 133.0648 151.0754 161.0597 179.0703</div><div class='input'>
+</div><div class='output co'>#&gt; NumericList of length 70
+#&gt; [["MCH00020"]] 146.760803 158.863541 174.988785 ... 487.989319 585.88446
+#&gt; [["MCH00002"]] 22.99 23.07 23.19 38.98 53.15 ... 413.22 414.22 429.16 495.2
+#&gt; [["MCH00006"]] 108.099566 152.005378 153.01824 ... 409.06729 499.103447
+#&gt; [["MCH00009"]] 137.0227 138.025605 139.034602 ... 316.303106 352.234228
+#&gt; [["MCH00014"]] 112.977759 205.053323 208.041128 ... 671.1778 673.200866
+#&gt; [["MCH00019"]] 78.893929 183.011719 193.957916 ... 408.010193 426.021942
+#&gt; [["MCH00012"]] 167.03389 168.040758 333.079965 ... 365.040698 373.073473
+#&gt; [["MCH00003"]] 195.09167 196.095033
+#&gt; [["MCH00016"]] 108.096149 152.004656 153.01824 ... 409.065314 491.043775
+#&gt; [["MCH00001"]] 1278.12 1279.11 1279.18 1306.21 ... 2091.32 2092.3 2136.33
+#&gt; ...
+#&gt; &lt;60 more elements&gt;</div><div class='input'>
 <span class='co'>## Access the full spectra data (including m/z and intensity values)</span>
 <span class='fu'>spectraData</span><span class='op'>(</span><span class='va'>be</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; DataFrame with 3 rows and 33 columns
-#&gt;     msLevel     rtime acquisitionNum scanIndex                          mz
-#&gt;   &lt;integer&gt; &lt;numeric&gt;      &lt;integer&gt; &lt;integer&gt;               &lt;NumericList&gt;
-#&gt; 1         2        NA             NA        NA 133.065,151.075,155.974,...
-#&gt; 2         2        NA             NA        NA 133.065,151.075,155.975,...
-#&gt; 3         2        NA             NA        NA 105.070,133.065,151.075,...
-#&gt;                        intensity dataStorage             dataOrigin centroided
-#&gt;                    &lt;NumericList&gt; &lt;character&gt;            &lt;character&gt;  &lt;logical&gt;
-#&gt; 1    21905.3, 9239.9,10980.9,...  &lt;MassBank&gt; Renaud, J. B.; Sumar..         NA
-#&gt; 2 46563.64,20681.71, 8681.31,...  &lt;MassBank&gt; Renaud, J. B.; Sumar..         NA
-#&gt; 3  22225.4,155144.7, 51027.0,...  &lt;MassBank&gt; Renaud, J. B.; Sumar..         NA
-#&gt;    smoothed  polarity precScanNum precursorMz precursorIntensity
-#&gt;   &lt;logical&gt; &lt;integer&gt;   &lt;integer&gt;   &lt;numeric&gt;          &lt;numeric&gt;
-#&gt; 1        NA         1          NA      179.07            161.059
-#&gt; 2        NA         1          NA      179.07            161.059
-#&gt; 3        NA         1          NA      179.07            161.059
-#&gt;   precursorCharge collisionEnergy isolationWindowLowerMz
-#&gt;         &lt;integer&gt;       &lt;numeric&gt;              &lt;numeric&gt;
-#&gt; 1              NA              NA                     NA
-#&gt; 2              NA              NA                     NA
-#&gt; 3              NA              NA                     NA
-#&gt;   isolationWindowTargetMz isolationWindowUpperMz spectrum_id
-#&gt;                 &lt;numeric&gt;              &lt;numeric&gt; &lt;character&gt;
-#&gt; 1                      NA                     NA    AC000001
-#&gt; 2                      NA                     NA    AC000002
-#&gt; 3                      NA                     NA    AC000003
-#&gt;            spectrum_name        date                authors     license
-#&gt;              &lt;character&gt; &lt;character&gt;            &lt;character&gt; &lt;character&gt;
-#&gt; 1 Mellein; LC-ESI-ITFT..  2017.07.07 Justin B. Renaud, Ma..    CC BY-SA
-#&gt; 2 Mellein; LC-ESI-ITFT..  2017.07.07 Justin B. Renaud, Ma..    CC BY-SA
-#&gt; 3 Mellein; LC-ESI-ITFT..  2017.07.07 Justin B. Renaud, Ma..    CC BY-SA
-#&gt;            copyright            publication                 splash compound_id
-#&gt;          &lt;character&gt;            &lt;character&gt;            &lt;character&gt;   &lt;integer&gt;
-#&gt; 1 Copyright (C) 2017 Renaud, J. B.; Sumar.. splash10-03fr-090000..           1
-#&gt; 2 Copyright (C) 2017 Renaud, J. B.; Sumar.. splash10-03fr-090000..           2
-#&gt; 3 Copyright (C) 2017 Renaud, J. B.; Sumar.. splash10-03fr-090000..           3
-#&gt;        adduct  ionization ionizationVoltage fragmentationMode
-#&gt;   &lt;character&gt; &lt;character&gt;       &lt;character&gt;       &lt;character&gt;
-#&gt; 1      [M+H]+         ESI            3.9 kV               HCD
-#&gt; 2      [M+H]+         ESI            3.9 kV               HCD
-#&gt; 3      [M+H]+         ESI            3.9 kV               HCD
-#&gt;   collisionEnergyText
-#&gt;           &lt;character&gt;
-#&gt; 1             10(NCE)
-#&gt; 2             20(NCE)
-#&gt; 3             30(NCE)</div><div class='input'>
+</div><div class='output co'>#&gt; DataFrame with 70 rows and 36 columns
+#&gt;       msLevel     rtime acquisitionNum scanIndex                             mz
+#&gt;     &lt;integer&gt; &lt;numeric&gt;      &lt;integer&gt; &lt;integer&gt;                  &lt;NumericList&gt;
+#&gt; 1           2        NA             NA        NA    146.761,158.864,174.989,...
+#&gt; 2          NA        NA             NA        NA          22.99,23.07,23.19,...
+#&gt; 3          NA        NA             NA        NA    108.100,152.005,153.018,...
+#&gt; 4          NA        NA             NA        NA    137.023,138.026,139.035,...
+#&gt; 5          NA        NA             NA        NA    112.978,205.053,208.041,...
+#&gt; ...       ...       ...            ...       ...                            ...
+#&gt; 66          2        NA             NA        NA                        185.028
+#&gt; 67          2        NA             NA        NA    58.0653,77.0386,79.0543,...
+#&gt; 68          2        NA             NA        NA    132.021,133.029,135.009,...
+#&gt; 69          2        NA             NA        NA    53.0388,54.0340,55.0544,...
+#&gt; 70          2        NA             NA        NA  88.0757,151.0540,152.0620,...
+#&gt;                                intensity dataStorage             dataOrigin
+#&gt;                            &lt;NumericList&gt; &lt;character&gt;            &lt;character&gt;
+#&gt; 1     0.980184,938.145447, 56.718353,...  &lt;MassBank&gt;                     NA
+#&gt; 2                     3173,2266, 880,...  &lt;MassBank&gt;                     NA
+#&gt; 3                 2809,119550, 91935,...  &lt;MassBank&gt;                     NA
+#&gt; 4               157703, 23566,  5190,...  &lt;MassBank&gt;                     NA
+#&gt; 5                     5686, 927, 756,...  &lt;MassBank&gt;                     NA
+#&gt; ...                                  ...         ...                    ...
+#&gt; 66                              34967548  &lt;MassBank&gt; Schymanski, E. L.; R..
+#&gt; 67           9143284, 341391,5278218,...  &lt;MassBank&gt; Schymanski, E. L.; R..
+#&gt; 68         82825.8,290504.6,301494.3,...  &lt;MassBank&gt; Schymanski, E. L.; R..
+#&gt; 69         1568742,19224644, 4676170,...  &lt;MassBank&gt; Schymanski, E. L.; R..
+#&gt; 70          678846,  403851,11111366,...  &lt;MassBank&gt; Schymanski, E. L.; R..
+#&gt;     centroided  smoothed  polarity precScanNum precursorMz precursorIntensity
+#&gt;      &lt;logical&gt; &lt;logical&gt; &lt;integer&gt;   &lt;integer&gt;   &lt;numeric&gt;          &lt;numeric&gt;
+#&gt; 1           NA        NA         0          NA         506                408
+#&gt; 2           NA        NA         1          NA          NA                 NA
+#&gt; 3           NA        NA         0          NA          NA                 NA
+#&gt; 4           NA        NA         1          NA          NA                 NA
+#&gt; 5           NA        NA         0          NA          NA                 NA
+#&gt; ...        ...       ...       ...         ...         ...                ...
+#&gt; 66          NA        NA         0          NA     185.028            185.028
+#&gt; 67          NA        NA         1          NA     455.290            455.290
+#&gt; 68          NA        NA         0          NA     253.051            253.051
+#&gt; 69          NA        NA         1          NA     358.238            358.237
+#&gt; 70          NA        NA         1          NA     256.170            256.169
+#&gt;     precursorCharge collisionEnergy isolationWindowLowerMz
+#&gt;           &lt;integer&gt;       &lt;numeric&gt;              &lt;numeric&gt;
+#&gt; 1                NA              NA                     NA
+#&gt; 2                NA              NA                     NA
+#&gt; 3                NA              NA                     NA
+#&gt; 4                NA              NA                     NA
+#&gt; 5                NA              NA                     NA
+#&gt; ...             ...             ...                    ...
+#&gt; 66               NA              NA                     NA
+#&gt; 67               NA              NA                     NA
+#&gt; 68               NA              NA                     NA
+#&gt; 69               NA              NA                     NA
+#&gt; 70               NA              NA                     NA
+#&gt;     isolationWindowTargetMz isolationWindowUpperMz spectrum_id
+#&gt;                   &lt;numeric&gt;              &lt;numeric&gt; &lt;character&gt;
+#&gt; 1                        NA                     NA    MCH00020
+#&gt; 2                        NA                     NA    MCH00002
+#&gt; 3                        NA                     NA    MCH00006
+#&gt; 4                        NA                     NA    MCH00009
+#&gt; 5                        NA                     NA    MCH00014
+#&gt; ...                     ...                    ...         ...
+#&gt; 66                       NA                     NA    SM834451
+#&gt; 67                       NA                     NA    SM855703
+#&gt; 68                       NA                     NA    SM882851
+#&gt; 69                       NA                     NA    SM849703
+#&gt; 70                       NA                     NA    SM858801
+#&gt;              spectrum_name                   date                authors
+#&gt;                &lt;character&gt;            &lt;character&gt;            &lt;character&gt;
+#&gt; 1   Adenosine 5'-triphos.. 2016.01.19 (Created .. Yoshikuni K, Tajiri ..
+#&gt; 2   Gentisic acid; MALDI.. 2016.01.19 (Created .. Wada Y, Osaka Medica..
+#&gt; 3   Gentisic acid; MALDI.. 2016.01.19 (Created .. Wada Y, Osaka Medica..
+#&gt; 4   5-Methoxysalicylic a.. 2016.01.19 (Created .. Wada Y, Osaka Medica..
+#&gt; 5   Sinapic acid; MALDI-.. 2016.01.19 (Created .. Wada Y, Osaka Medica..
+#&gt; ...                    ...                    ...                    ...
+#&gt; 66  m-Xylene-4-sulfonic ..             2016.12.12 Krauss M, Schymanski..
+#&gt; 67  Verapamil; LC-ESI-QF..             2016.12.12 Krauss M, Schymanski..
+#&gt; 68  Daidzein; LC-ESI-QFT..             2016.12.12 Krauss M, Schymanski..
+#&gt; 69  Oxybutynin; LC-ESI-Q..             2016.12.12 Krauss M, Schymanski..
+#&gt; 70  Diphenhydramine; LC-.. 2019.11.20 (Created .. Krauss M, Schymanski..
+#&gt;         license              copyright            publication
+#&gt;     &lt;character&gt;            &lt;character&gt;            &lt;character&gt;
+#&gt; 1      CC BY-SA                     NA                     NA
+#&gt; 2      CC BY-SA                     NA                     NA
+#&gt; 3      CC BY-SA                     NA                     NA
+#&gt; 4      CC BY-SA                     NA                     NA
+#&gt; 5      CC BY-SA                     NA                     NA
+#&gt; ...         ...                    ...                    ...
+#&gt; 66        CC BY Copyright (C) 2016 U.. Schymanski, E. L.; R..
+#&gt; 67        CC BY Copyright (C) 2016 U.. Schymanski, E. L.; R..
+#&gt; 68        CC BY Copyright (C) 2016 U.. Schymanski, E. L.; R..
+#&gt; 69        CC BY Copyright (C) 2016 U.. Schymanski, E. L.; R..
+#&gt; 70        CC BY Copyright (C) 2016 U.. Schymanski, E. L.; R..
+#&gt;                     splash compound_id      adduct  ionization
+#&gt;                &lt;character&gt;   &lt;integer&gt; &lt;character&gt; &lt;character&gt;
+#&gt; 1   splash10-0a4i-000090..           1      [M-H]-          NA
+#&gt; 2   splash10-004r-191300..           2          NA          NA
+#&gt; 3   splash10-0udi-090200..           3          NA          NA
+#&gt; 4   splash10-0fri-093000..           4          NA          NA
+#&gt; 5   splash10-006t-019080..           5          NA          NA
+#&gt; ...                    ...         ...         ...         ...
+#&gt; 66  splash10-000i-090000..          66      [M-H]-         ESI
+#&gt; 67  splash10-066r-090030..          67      [M+H]+         ESI
+#&gt; 68  splash10-0udi-009000..          68      [M-H]-         ESI
+#&gt; 69  splash10-0a4i-860900..          69      [M+H]+         ESI
+#&gt; 70  splash10-014i-090000..          70      [M+H]+         ESI
+#&gt;     ionization_voltage fragmentation_mode collision_energy_text
+#&gt;            &lt;character&gt;        &lt;character&gt;           &lt;character&gt;
+#&gt; 1                   NA                 NA                    NA
+#&gt; 2                   NA                 NA                    NA
+#&gt; 3                   NA                 NA                    NA
+#&gt; 4                   NA                 NA                    NA
+#&gt; 5                   NA                 NA                    NA
+#&gt; ...                ...                ...                   ...
+#&gt; 66                  NA                HCD         35  (nominal)
+#&gt; 67                  NA                HCD         35  (nominal)
+#&gt; 68                  NA                HCD         35  (nominal)
+#&gt; 69                  NA                HCD         35  (nominal)
+#&gt; 70                  NA                HCD         35  (nominal)
+#&gt;                 instrument instrument_type precursor_mz_text
+#&gt;                &lt;character&gt;     &lt;character&gt;       &lt;character&gt;
+#&gt; 1   LTQ Orbitrap XL, The..     LC-ESI-ITFT        506.000000
+#&gt; 2   Voyager DE-PRO, Appl..       MALDI-TOF                NA
+#&gt; 3   Voyager DE-PRO, Appl..       MALDI-TOF                NA
+#&gt; 4   Voyager DE-PRO, Appl..       MALDI-TOF                NA
+#&gt; 5   Voyager DE-PRO, Appl..       MALDI-TOF                NA
+#&gt; ...                    ...             ...               ...
+#&gt; 66  Q Exactive Plus Orbi..      LC-ESI-QFT          185.0278
+#&gt; 67  Q Exactive Plus Orbi..      LC-ESI-QFT          455.2904
+#&gt; 68  Q Exactive Plus Orbi..      LC-ESI-QFT          253.0506
+#&gt; 69  Q Exactive Plus Orbi..      LC-ESI-QFT          358.2377
+#&gt; 70  Q Exactive Plus Orbi..      LC-ESI-QFT          256.1696</div><div class='input'>
 <span class='co'>## Add a new spectra variable</span>
 <span class='va'>be</span><span class='op'>$</span><span class='va'>new_variable</span> <span class='op'>&lt;-</span> <span class='st'>"b"</span>
 <span class='va'>be</span><span class='op'>$</span><span class='va'>new_variable</span>
-</div><div class='output co'>#&gt; [1] "b" "b" "b"</div><div class='input'>
+</div><div class='output co'>#&gt;  [1] "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b"
+#&gt; [20] "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b"
+#&gt; [39] "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b"
+#&gt; [58] "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b" "b"</div><div class='input'>
 <span class='co'>## Subset the backend</span>
 <span class='va'>be_sub</span> <span class='op'>&lt;-</span> <span class='va'>be</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>3</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>]</span>
 
 <span class='fu'>spectraNames</span><span class='op'>(</span><span class='va'>be</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "AC000001" "AC000002" "AC000003"</div><div class='input'><span class='fu'>spectraNames</span><span class='op'>(</span><span class='va'>be_sub</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "AC000003" "AC000001"</div></pre>
+</div><div class='output co'>#&gt;  [1] "MCH00020" "MCH00002" "MCH00006" "MCH00009" "MCH00014" "MCH00019"
+#&gt;  [7] "MCH00012" "MCH00003" "MCH00016" "MCH00001" "MCH00018" "MCH00007"
+#&gt; [13] "MCH00013" "MCH00015" "MCH00008" "MCH00004" "MCH00005" "MCH00011"
+#&gt; [19] "MCH00017" "MCH00010" "SM864952" "SM823851" "SM868004" "SM862204"
+#&gt; [25] "SM834302" "SM810352" "SM847101" "SM861203" "SM839603" "SM829401"
+#&gt; [31] "SM814501" "SM858902" "SM850104" "SM854403" "SM836003" "SM821703"
+#&gt; [37] "SM880602" "SM868101" "SM851552" "SM804503" "SM848503" "SM842251"
+#&gt; [43] "SM817703" "SM847302" "SM805801" "SM820101" "SM816753" "SM805001"
+#&gt; [49] "SM838051" "SM812904" "SM840401" "SM812701" "SM861901" "SM874401"
+#&gt; [55] "SM838502" "SM857001" "SM858203" "SM847702" "SM883903" "SM818403"
+#&gt; [61] "SM871101" "SM842156" "SM841901" "SM854306" "SM878551" "SM834451"
+#&gt; [67] "SM855703" "SM882851" "SM849703" "SM858801"</div><div class='input'><span class='fu'>spectraNames</span><span class='op'>(</span><span class='va'>be_sub</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "MCH00006" "MCH00020"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
