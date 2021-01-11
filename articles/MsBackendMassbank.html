@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MsBackendMassbank</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (links[i].hostname != window.location.hostname)
       links[i].target = '_blank';
 });
-</script><p><strong>Package</strong>: <em><a href="https://bioconductor.org/packages/3.13/MsBackendMassbank">MsBackendMassbank</a></em><br><strong>Authors</strong>: Michael Witting [aut, cre] (<a href="https://orcid.org/0000-0002-1462-4426" class="uri">https://orcid.org/0000-0002-1462-4426</a>), Johannes Rainer [aut] (<a href="https://orcid.org/0000-0002-6977-7147" class="uri">https://orcid.org/0000-0002-6977-7147</a>)<br><strong>Last modified:</strong> 2020-12-16 12:28:33<br><strong>Compiled</strong>: Wed Dec 16 12:43:37 2020</p>
+</script><p><strong>Package</strong>: <em><a href="https://bioconductor.org/packages/3.13/MsBackendMassbank">MsBackendMassbank</a></em><br><strong>Authors</strong>: Michael Witting [aut, cre] (<a href="https://orcid.org/0000-0002-1462-4426" class="uri">https://orcid.org/0000-0002-1462-4426</a>), Johannes Rainer [aut] (<a href="https://orcid.org/0000-0002-6977-7147" class="uri">https://orcid.org/0000-0002-6977-7147</a>)<br><strong>Last modified:</strong> 2021-01-11 13:39:38<br><strong>Compiled</strong>: Mon Jan 11 13:56:21 2021</p>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
@@ -496,8 +496,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                        package <span class="op">=</span> <span class="st">"MsBackendMassbank"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>We next <em>initialize</em> the <code>MsBackendMassbankSql</code> backend which supports direct access to the MassBank in a SQL database and create a <code>Spectra</code> object from that.</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">be</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Spectra/man/hidden_aliases.html">backendInitialize</a></span><span class="op">(</span><span class="fu"><a href="../reference/MsBackendMassbankSql.html">MsBackendMassbankSql</a></span><span class="op">(</span><span class="op">)</span>, dbcon <span class="op">=</span> <span class="va">con</span><span class="op">)</span>
-<span class="va">mb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Spectra/man/Spectra.html">Spectra</a></span><span class="op">(</span><span class="va">be</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">mb</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/Spectra/man/Spectra.html">Spectra</a></span><span class="op">(</span><span class="va">con</span>, source <span class="op">=</span> <span class="fu"><a href="../reference/MsBackendMassbankSql.html">MsBackendMassbankSql</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="va">mb</span></code></pre></div>
 <pre><code>## MSn data (Spectra) with 70 spectra in a MsBackendMassbankSql backend:
 ##      msLevel precursorMz  polarity
@@ -604,7 +603,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <a href="#session-information" class="anchor"></a>Session information</h1>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## R Under development (unstable) (2020-11-02 r79396)
+<pre><code>## R Under development (unstable) (2021-01-07 r79806)
 ## Platform: x86_64-pc-linux-gnu (64-bit)
 ## Running under: Ubuntu 20.04.1 LTS
 ## 
@@ -624,18 +623,18 @@ document.addEventListener("DOMContentLoaded", function() {
 ## [8] methods   base     
 ## 
 ## other attached packages:
-## [1] MsCoreUtils_1.3.1       RSQLite_2.2.1           MsBackendMassbank_0.3.1
-## [4] Spectra_1.1.12          ProtGenerics_1.23.5     BiocParallel_1.25.1    
+## [1] MsCoreUtils_1.3.2       RSQLite_2.2.2           MsBackendMassbank_0.3.2
+## [4] Spectra_1.1.12          ProtGenerics_1.23.6     BiocParallel_1.25.2    
 ## [7] S4Vectors_0.29.6        BiocGenerics_0.37.0     BiocStyle_2.19.1       
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_1.0.5          compiler_4.1.0      BiocManager_1.30.10
 ##  [4] tools_4.1.0         digest_0.6.27       bit_4.0.4          
 ##  [7] evaluate_0.14       memoise_1.1.0       pkgconfig_2.0.3    
-## [10] rlang_0.4.9         DBI_1.1.0           yaml_2.2.1         
-## [13] pkgdown_1.6.1.9000  xfun_0.19           stringr_1.4.0      
-## [16] knitr_1.30          vctrs_0.3.5         desc_1.2.0         
-## [19] fs_1.5.0            systemfonts_0.3.2   IRanges_2.25.5     
+## [10] rlang_0.4.10        DBI_1.1.0           yaml_2.2.1         
+## [13] pkgdown_1.6.1.9000  xfun_0.20           stringr_1.4.0      
+## [16] knitr_1.30          vctrs_0.3.6         desc_1.2.0         
+## [19] fs_1.5.0            systemfonts_0.3.2   IRanges_2.25.6     
 ## [22] rprojroot_2.0.2     bit64_4.0.5         R6_2.5.0           
 ## [25] textshaping_0.2.1   rmarkdown_2.6       bookdown_0.21      
 ## [28] blob_1.2.1          magrittr_2.0.1      htmltools_0.5.0    
