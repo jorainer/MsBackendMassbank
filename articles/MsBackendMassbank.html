@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">MsBackendMassbank</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.3</span>
       </span>
     </div>
 
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", function() {
     if (links[i].hostname != window.location.hostname)
       links[i].target = '_blank';
 });
-</script><p><strong>Package</strong>: <em><a href="https://bioconductor.org/packages/3.13/MsBackendMassbank">MsBackendMassbank</a></em><br><strong>Authors</strong>: Michael Witting [aut, cre] (<a href="https://orcid.org/0000-0002-1462-4426" class="uri">https://orcid.org/0000-0002-1462-4426</a>), Johannes Rainer [aut] (<a href="https://orcid.org/0000-0002-6977-7147" class="uri">https://orcid.org/0000-0002-6977-7147</a>)<br><strong>Last modified:</strong> 2021-01-11 13:39:38<br><strong>Compiled</strong>: Mon Jan 11 13:56:21 2021</p>
+</script><p><strong>Package</strong>: <em><a href="https://bioconductor.org/packages/3.13/MsBackendMassbank">MsBackendMassbank</a></em><br><strong>Authors</strong>: Michael Witting [aut, cre] (<a href="https://orcid.org/0000-0002-1462-4426" class="uri">https://orcid.org/0000-0002-1462-4426</a>), Johannes Rainer [aut] (<a href="https://orcid.org/0000-0002-6977-7147" class="uri">https://orcid.org/0000-0002-6977-7147</a>)<br><strong>Last modified:</strong> 2021-01-12 14:01:06<br><strong>Compiled</strong>: Tue Jan 12 14:06:10 2021</p>
 <div id="introduction" class="section level1">
 <h1 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h1>
@@ -511,7 +511,7 @@ document.addEventListener("DOMContentLoaded", function() {
 ## 8          2     253.051         0
 ## 9          2     358.238         1
 ## 10         2     256.170         1
-##  ... 33 more variables/columns.
+##  ... 40 more variables/columns.
 ##  Use  'spectraVariables' to list all of them.</code></pre>
 <p>We can now use this <code>Spectra</code> object to access and use the MassBank data for our analysis. Note that the <code>Spectra</code> object itself does not contain any data from MassBank. Any data will be fetched on demand from the database backend.</p>
 <p>To get a listing of all available annotations for each spectrum (the so-called <em>spectra variables</em>) we can use the <code>spectraVariables</code> function.</p>
@@ -533,7 +533,12 @@ document.addEventListener("DOMContentLoaded", function() {
 ## [27] "adduct"                  "ionization"             
 ## [29] "ionization_voltage"      "fragmentation_mode"     
 ## [31] "collision_energy_text"   "instrument"             
-## [33] "instrument_type"         "precursor_mz_text"</code></pre>
+## [33] "instrument_type"         "formula"                
+## [35] "exactmass"               "smiles"                 
+## [37] "inchi"                   "inchikey"               
+## [39] "cas"                     "pubchem"                
+## [41] "precursor_mz_text"</code></pre>
+<p>Through the <code>MsBackendMassbankSql</code> we can thus access spectra information as well as its annotation.</p>
 <p>We can access <em>core</em> spectra variables, such as the MS level with the corresponding function <code>msLevel</code>.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu">msLevel</span><span class="op">(</span><span class="va">mb</span><span class="op">)</span><span class="op">)</span></code></pre></div>
@@ -623,7 +628,7 @@ document.addEventListener("DOMContentLoaded", function() {
 ## [8] methods   base     
 ## 
 ## other attached packages:
-## [1] MsCoreUtils_1.3.2       RSQLite_2.2.2           MsBackendMassbank_0.3.2
+## [1] MsCoreUtils_1.3.2       RSQLite_2.2.2           MsBackendMassbank_0.3.3
 ## [4] Spectra_1.1.12          ProtGenerics_1.23.6     BiocParallel_1.25.2    
 ## [7] S4Vectors_0.29.6        BiocGenerics_0.37.0     BiocStyle_2.19.1       
 ## 
